@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class HelloWorldRestController {
 
-    @GetMapping("/")
-    fun helloWorld(): String {
-        return "Hello World!"
-    }
+//    @GetMapping("/")
+//    fun helloWorld(): String {
+//        return "Hello World! ${System.getenv("DB_NAME")}"
+//    }
 }

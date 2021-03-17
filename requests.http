@@ -1,0 +1,15 @@
+###
+GET http://localhost:8080/notes/1
+Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+
+###
+POST http://localhost:8080/notes
+Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+Content-Type: application/json
+
+{
+  "id": 1,
+  "userId": 1,
+  "title": "anc",
+  "note": "ksfajdhbadslkfjbs"
+}
