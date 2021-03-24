@@ -3,7 +3,6 @@ package com.example.akainotes.restcontrollers
 import com.example.akainotes.NotesRepository
 import com.example.akainotes.models.Note
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -13,8 +12,6 @@ import java.util.*
 @RestController
 @RequestMapping("/notes")
 class NotesRestController(private val repository: NotesRepository) {
-
-    val notes = arrayListOf<Note>()
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getNotes(): ResponseEntity<Flow<Note>> {
@@ -42,17 +39,18 @@ class NotesRestController(private val repository: NotesRepository) {
     }
 
     @PutMapping("/{noteId}", consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun updateNote(@PathVariable("noteId") noteId: String, @RequestBody note: Note) {
+    suspend fun updateNote(@PathVariable("noteId") noteId: String, @RequestBody note: Note) {
         // TODO get user id
-        val noteToRemove = notes.find { it.id == noteId }
-        notes.remove(noteToRemove)
-        notes.add(note)
+        val userId = "wojtek"
+
+        note.id = noteId
+        note.userId = userId
+        repository.save(note)
     }
 
     @DeleteMapping("/{noteId}")
-    fun deleteNote(@PathVariable("noteId") noteId: String) {
+    suspend fun deleteNote(@PathVariable("noteId") noteId: String) {
         // TODO get user id
-        val noteToRemove = notes.find { it.id == noteId }
-        notes.remove(noteToRemove)
+        repository.deleteById(noteId)
     }
 }
