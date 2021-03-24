@@ -5,6 +5,5 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 
 interface NotesRepository : CoroutineCrudRepository<Note, String> {
-    fun findNoteByUserId(userId: String) : Note
     fun findNotesByUserId(userId: String) : Flow<Note>
 }
