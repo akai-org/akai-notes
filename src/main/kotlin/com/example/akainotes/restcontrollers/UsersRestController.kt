@@ -30,7 +30,7 @@ class UsersRestController(
                 UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
             )
         } catch (e: BadCredentialsException) {
-            throw Exception("Incorrect username or password", e)
+            throw Exception("Incorrect username or password", e) // TODO own exception
         }
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
@@ -38,6 +38,7 @@ class UsersRestController(
         return ResponseEntity.ok(AuthenticationResponse(jwt))
     }
 
+    @Throws(UserExistsException::class)
     @PostMapping("/register")
     fun addUser(@RequestBody user: User) {
         //TODO add user
