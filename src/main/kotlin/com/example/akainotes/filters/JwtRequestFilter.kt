@@ -28,13 +28,15 @@ class JwtRequestFilter(
         var jwt: String? = null
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7)
+            jwt = authHeader.replace("Bearer ","")
+            println(jwt)
             username = jwtUtil.extractUsername(jwt)
         }
 
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = userDetailsService.loadUserByUsername(username)
             if (jwtUtil.validateToken(jwt!!, userDetails)) {
+                println("inside if")
                 val usernamePasswordAuthToken =
                     UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 usernamePasswordAuthToken.details = WebAuthenticationDetailsSource().buildDetails(request)

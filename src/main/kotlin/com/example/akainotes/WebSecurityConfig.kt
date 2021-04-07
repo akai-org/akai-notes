@@ -19,22 +19,6 @@ class WebSecurityConfig(
     private val userDetailsService: NotesUserDetailsService,
     private val jwtRequestFilter: JwtRequestFilter
 ) : WebSecurityConfigurerAdapter() {
-//    @Throws(Exception::class)
-//    override fun configure(http: HttpSecurity) {
-//        http.cors().and().csrf().disable()
-//    }
-
-//    @Bean
-//    fun corsConfigurationSource(): CorsConfigurationSource {
-//        val configuration = CorsConfiguration()
-//        configuration.allowedOrigins = listOf("*")
-//        configuration.allowedMethods = listOf("*")
-//        configuration.allowedHeaders = listOf("*")
-//        configuration.allowCredentials = true
-//        val source = UrlBasedCorsConfigurationSource()
-//        source.registerCorsConfiguration("/**", configuration)
-//        return source
-//    }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService)
@@ -42,7 +26,7 @@ class WebSecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http.csrf()
-            .disable().authorizeRequests().antMatchers("/authenticate").permitAll().anyRequest().authenticated()
+            .disable().authorizeRequests().antMatchers("/authenticate", "/register").permitAll().anyRequest().authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
     }

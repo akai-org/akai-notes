@@ -1,6 +1,7 @@
 package com.example.akainotes.restcontrollers
 
 import com.example.akainotes.NotesUserDetailsService
+import com.example.akainotes.UserExistsException
 import com.example.akainotes.UsersRepository
 import com.example.akainotes.models.User
 import com.example.akainotes.models.auth.AuthenticationRequest
@@ -23,8 +24,7 @@ class UsersRestController(
 ) {
 
     @PostMapping("/authenticate")
-    fun createAuthenticationToken(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<*> {
-
+    suspend fun logIn(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<AuthenticationResponse> {
         try {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
@@ -40,8 +40,25 @@ class UsersRestController(
 
     @Throws(UserExistsException::class)
     @PostMapping("/register")
-    fun addUser(@RequestBody user: User) {
-        //TODO add user
+    suspend fun addUser(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<User> {
+        usersRepository.findUserByEmail(authenticationRequest.username)?.let {
+            throw UserExistsException()
+        }
+        areCredentialsCorrect(authenticationRequest.username, authenticationRequest.password)
+        val newUser = authenticationRequest.toUser()
+        usersRepository.save(newUser)
+        return ResponseEntity.ok(newUser)
+    }
+
+    private fun AuthenticationRequest.toUser(): User = User(email = username, pswd = password)
+
+    private fun areCredentialsCorrect(username: String, password: String): Boolean {
+        if (username.length <= 8 || password.length <= 8) return false
+
+        val regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$".toRegex()
+        if (!regex.matches(username)) return false
+        //TODO throw exception
+        return true
     }
 
 }

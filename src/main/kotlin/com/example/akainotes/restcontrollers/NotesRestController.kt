@@ -14,7 +14,7 @@ import java.util.*
 class NotesRestController(private val repository: NotesRepository) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getNotes(): ResponseEntity<Flow<Note>> {
+    suspend fun getNotes(): ResponseEntity<List<Note>> {
         // TODO get user id
         val userId = "wojtek"
 

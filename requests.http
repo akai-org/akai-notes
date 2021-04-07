@@ -1,15 +1,32 @@
 ###
-GET http://localhost:8080/notes/1
-Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+GET http://localhost:8080/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWt1YmVra296YWsiLCJpYXQiOjE2MTc4MTkyMTEsImV4cCI6MTYxNzgyMjgxMX0.x925jy6NU-VUQGajZ4ocD3sZ_OjZKlt1WbS3GTwwLEQ
 
 ###
 POST http://localhost:8080/notes
-Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWt1YmVra296YWsiLCJpYXQiOjE2MTc4MTkyMTEsImV4cCI6MTYxNzgyMjgxMX0.x925jy6NU-VUQGajZ4ocD3sZ_OjZKlt1WbS3GTwwLEQ
 Content-Type: application/json
 
 {
-  "id": 1,
-  "userId": 1,
-  "title": "anc",
-  "note": "ksfajdhbadslkfjbs"
+  "title": "bleble",
+  "note": "dupadupa dupa"
 }
+
+###
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "username": "jakubekkozak",
+  "password": "dupadupa"
+}
+
+###
+POST http://localhost:8080/authenticate
+Content-Type: application/json
+
+{
+  "username": "jakubekkozak",
+  "password": "dupadupa"
+}
+

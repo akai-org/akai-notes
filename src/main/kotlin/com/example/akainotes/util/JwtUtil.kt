@@ -21,12 +21,12 @@ object JwtUtil {
         return extractClaim(token, Claims::getExpiration)
     }
 
-    fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
+    private fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
         val claims = extractAllClaims(token)
         return claimsResolver(claims)
     }
 
-    fun extractAllClaims(token: String): Claims {
+    private fun extractAllClaims(token: String): Claims {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).body
     }
 
@@ -35,7 +35,7 @@ object JwtUtil {
     }
 
     fun generateToken(userDetails: UserDetails): String {
-        return createToken(emptyMap(), userDetails.username)
+        return createToken(mutableMapOf(), userDetails.username)
     }
 
     private fun createToken(claims: Map<String, Any>, subject: String): String {
@@ -43,7 +43,7 @@ object JwtUtil {
             .setClaims(claims)
             .setSubject(subject)
             .setIssuedAt(Date())
-            .setExpiration(Date(HOUR * 10L))
+            .setExpiration(Date().apply { time += HOUR })
             .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
             .compact()
     }
