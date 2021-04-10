@@ -5,9 +5,3 @@ abstract class ApiError {
     abstract val code: String
 }
 
-class UserExistsError : ApiError() {
-    override val message: String
-        get() = "User already exists"
-    override val code: String
-        get() = "already_exists"
-}

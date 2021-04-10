@@ -1,5 +1,7 @@
 package com.example.akainotes.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.GrantedAuthority
@@ -10,6 +12,7 @@ data class User(
     @Id
     var id: String = "",
     val email: String,
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val pswd: String,
     val role: String = ""
 ) : UserDetails {
@@ -17,6 +20,7 @@ data class User(
         return mutableListOf()
     }
 
+    @JsonIgnore
     override fun getPassword(): String = pswd
 
     override fun getUsername(): String = email

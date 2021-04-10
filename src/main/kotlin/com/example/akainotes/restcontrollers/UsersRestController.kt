@@ -1,8 +1,9 @@
 package com.example.akainotes.restcontrollers
 
 import com.example.akainotes.NotesUserDetailsService
-import com.example.akainotes.UserExistsException
 import com.example.akainotes.UsersRepository
+import com.example.akainotes.exceptions.UserExistsException
+import com.example.akainotes.exceptions.WrongCredentialsException
 import com.example.akainotes.models.User
 import com.example.akainotes.models.auth.AuthenticationRequest
 import com.example.akainotes.models.auth.AuthenticationResponse
@@ -23,14 +24,14 @@ class UsersRestController(
     private val usersRepository: UsersRepository
 ) {
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     suspend fun logIn(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<AuthenticationResponse> {
         try {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
             )
         } catch (e: BadCredentialsException) {
-            throw Exception("Incorrect username or password", e) // TODO own exception
+            throw WrongCredentialsException("Incorrect username or password")
         }
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
@@ -40,11 +41,11 @@ class UsersRestController(
 
     @Throws(UserExistsException::class)
     @PostMapping("/register")
-    suspend fun addUser(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<User> {
+    suspend fun register(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<User> {
         usersRepository.findUserByEmail(authenticationRequest.username)?.let {
             throw UserExistsException()
         }
-        areCredentialsCorrect(authenticationRequest.username, authenticationRequest.password)
+        checkCredentials(authenticationRequest.username, authenticationRequest.password)
         val newUser = authenticationRequest.toUser()
         usersRepository.save(newUser)
         return ResponseEntity.ok(newUser)
@@ -52,13 +53,12 @@ class UsersRestController(
 
     private fun AuthenticationRequest.toUser(): User = User(email = username, pswd = password)
 
-    private fun areCredentialsCorrect(username: String, password: String): Boolean {
-        if (username.length <= 8 || password.length <= 8) return false
+    private fun checkCredentials(username: String, password: String) {
+        if (username.length <= 8 || password.length <= 8) throw WrongCredentialsException("Email or/and password too short")
 
-        val regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$".toRegex()
-        if (!regex.matches(username)) return false
-        //TODO throw exception
-        return true
+        val regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$".toRegex(setOf(RegexOption.IGNORE_CASE))
+        if (!regex.matches(username)) throw WrongCredentialsException("Wrong email")
+
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.akainotes
 
 import com.example.akainotes.filters.JwtRequestFilter
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -26,7 +25,7 @@ class WebSecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http.csrf()
-            .disable().authorizeRequests().antMatchers("/authenticate", "/register").permitAll().anyRequest().authenticated()
+            .disable().authorizeRequests().antMatchers("/login", "/register").permitAll().anyRequest().authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
