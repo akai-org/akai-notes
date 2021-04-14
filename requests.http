@@ -1,15 +1,37 @@
 ###
-GET http://localhost:8080/notes/1
-Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+GET http://localhost:8080/notes
+Authorization: Bearer {{token}}
 
 ###
+GET http://localhost:8080/notes/{{noteId}}
+Authorization: Bearer {{token}}
+
+###
+
 POST http://localhost:8080/notes
-Authorization: Basic user 2689f022-4cf4-4b24-aebc-b027a62f5dbe
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "id": 1,
-  "userId": 1,
-  "title": "anc",
-  "note": "ksfajdhbadslkfjbs"
+  "title": "note title",
+  "note": "note note"
 }
+
+###
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "username": {{email}},
+  "password": {{password}}
+}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": {{email}},
+  "password": {{password}}
+}
+
