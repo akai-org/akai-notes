@@ -1,7 +1,6 @@
 package com.example.akainotes.repositories
 
 import com.example.akainotes.models.Note
-import kotlinx.coroutines.flow.Flow
 import org.springframework.data.mongodb.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 

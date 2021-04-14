@@ -51,14 +51,11 @@ class UsersRestController(
         return ResponseEntity.ok(newUser)
     }
 
-    private fun AuthenticationRequest.toUser(): User = User(email = username, pswd = password)
-
     private fun checkCredentials(username: String, password: String) {
         if (username.length <= 8 || password.length <= 8) throw WrongCredentialsException("Email or/and password too short")
 
         val regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$".toRegex(setOf(RegexOption.IGNORE_CASE))
         if (!regex.matches(username)) throw WrongCredentialsException("Wrong email")
-
     }
 
 }
