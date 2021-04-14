@@ -1,6 +1,6 @@
 package com.example.akainotes.filters
 
-import com.example.akainotes.NotesUserDetailsService
+import com.example.akainotes.services.NotesUserDetailsService
 import com.example.akainotes.util.JwtUtil
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder

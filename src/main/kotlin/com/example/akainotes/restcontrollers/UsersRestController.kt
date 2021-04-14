@@ -1,7 +1,7 @@
 package com.example.akainotes.restcontrollers
 
-import com.example.akainotes.NotesUserDetailsService
-import com.example.akainotes.UsersRepository
+import com.example.akainotes.services.NotesUserDetailsService
+import com.example.akainotes.repositories.UsersRepository
 import com.example.akainotes.exceptions.UserExistsException
 import com.example.akainotes.exceptions.WrongCredentialsException
 import com.example.akainotes.models.User

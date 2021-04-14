@@ -1,4 +1,4 @@
-package com.example.akainotes
+package com.example.akainotes.repositories
 
 import com.example.akainotes.models.User
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
