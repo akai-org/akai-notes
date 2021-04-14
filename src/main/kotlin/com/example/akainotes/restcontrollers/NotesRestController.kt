@@ -1,6 +1,6 @@
 package com.example.akainotes.restcontrollers
 
-import com.example.akainotes.NotesRepository
+import com.example.akainotes.repositories.NotesRepository
 import com.example.akainotes.exceptions.NoteNotFoundException
 import com.example.akainotes.models.Note
 import org.springframework.http.HttpStatus

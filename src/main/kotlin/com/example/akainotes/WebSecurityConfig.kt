@@ -1,6 +1,7 @@
 package com.example.akainotes
 
 import com.example.akainotes.filters.JwtRequestFilter
+import com.example.akainotes.services.NotesUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder

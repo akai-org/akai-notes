@@ -1,4 +1,4 @@
-package com.example.akainotes
+package com.example.akainotes.repositories
 
 import com.example.akainotes.models.Note
 import kotlinx.coroutines.flow.Flow

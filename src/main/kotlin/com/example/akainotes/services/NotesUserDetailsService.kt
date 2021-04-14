@@ -1,5 +1,6 @@
-package com.example.akainotes
+package com.example.akainotes.services
 
+import com.example.akainotes.repositories.UsersRepository
 import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
