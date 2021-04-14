@@ -15,7 +15,6 @@ class NotesRestController(private val repository: NotesRepository) : BaseAuthori
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun getNotes(): ResponseEntity<List<Note>> {
         val userId = getUser().id
-
         return ResponseEntity.ok(repository.findNotesByUserId(userId))
     }
 
@@ -23,9 +22,8 @@ class NotesRestController(private val repository: NotesRepository) : BaseAuthori
     @GetMapping("/{noteId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun getNote(@PathVariable("noteId") noteId: String): ResponseEntity<Note> {
         val userId = getUser().id
-        val note = repository.findById(noteId)?.takeIf { it.userId == userId }
-
-        return note?.let { ResponseEntity.ok(it) } ?: throw NoteNotFoundException()
+        val note = repository.findByIdAndUserId(noteId, userId) ?: throw NoteNotFoundException()
+        return ResponseEntity.ok(note)
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
@@ -40,11 +38,7 @@ class NotesRestController(private val repository: NotesRepository) : BaseAuthori
     @PutMapping("/{noteId}", consumes = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun updateNote(@PathVariable("noteId") noteId: String, @RequestBody newNote: Note) {
         val userId = getUser().id
-        val oldNote = repository.findById(noteId)
-
-        if (oldNote == null || oldNote.userId != userId) {
-            throw NoteNotFoundException()
-        }
+        repository.findByIdAndUserId(noteId, userId)?: throw NoteNotFoundException()
 
         newNote.id = noteId
         newNote.userId = userId
@@ -55,12 +49,7 @@ class NotesRestController(private val repository: NotesRepository) : BaseAuthori
     @DeleteMapping("/{noteId}")
     suspend fun deleteNote(@PathVariable("noteId") noteId: String) {
         val userId = getUser().id
-        val oldNote = repository.findById(noteId)
-
-        if (oldNote == null || oldNote.userId != userId) {
-            throw NoteNotFoundException()
-        }
-
+        repository.findByIdAndUserId(noteId, userId)?: throw NoteNotFoundException()
         repository.deleteById(noteId)
     }
 }
