@@ -1,8 +1,8 @@
 package com.example.akainotes.restcontrollers
 
-import com.example.akainotes.repositories.NotesRepository
 import com.example.akainotes.exceptions.NoteNotFoundException
 import com.example.akainotes.models.Note
+import com.example.akainotes.repositories.NotesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -15,7 +15,7 @@ class NotesRestController(private val repository: NotesRepository) : BaseAuthori
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun getNotes(): ResponseEntity<List<Note>> {
         val userId = getUser().id
-        return ResponseEntity.ok(repository.findNotesByUserId(userId))
+        return ResponseEntity.ok(repository.findByUserIdAndSearchQuery(userId, filter))
     }
 
     @Throws(NoteNotFoundException::class)
