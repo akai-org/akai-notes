@@ -37,7 +37,7 @@ class RestExceptionHandler {
     fun handleUnauthorizedException(
         unauthorizedException: UnauthorizedException
     ): ResponseEntity<UnauthorizedError> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(UnauthorizedError())
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(UnauthorizedError())
     }
 
     @ExceptionHandler(WrongCredentialsException::class)
@@ -45,6 +45,6 @@ class RestExceptionHandler {
         wrongCredentialsException: WrongCredentialsException
     ): ResponseEntity<WrongCredentialsError> {
         val wrongCredentialsError = WrongCredentialsError(wrongCredentialsException.message ?: "Wrong Credentials")
-        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(wrongCredentialsError)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(wrongCredentialsError)
     }
 }
