@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.util.UrlPathHelper
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -23,7 +24,7 @@ class JwtRequestFilter(
         filterChain: FilterChain
     ) {
         val authHeader = request.getHeader("Authorization")
-
+        print(request)
         var username: String? = null
         var jwt: String? = null
 
