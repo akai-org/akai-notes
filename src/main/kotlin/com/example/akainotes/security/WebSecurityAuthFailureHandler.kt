@@ -24,7 +24,6 @@ class WebSecurityAuthFailureHandler: AuthenticationFailureHandler {
         exception: AuthenticationException?
     ) {
         logger.error("AuthFailure exception: $exception")
-        logger.error(request?.queryString)
         exception?.printStackTrace()
         when (exception) {
             is BadCredentialsException -> {

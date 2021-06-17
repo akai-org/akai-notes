@@ -24,13 +24,11 @@ class JwtRequestFilter(
         filterChain: FilterChain
     ) {
         val authHeader = request.getHeader("Authorization")
-        print(request)
         var username: String? = null
         var jwt: String? = null
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.replace("Bearer ","")
-            println(jwt)
             username = jwtUtil.extractUsername(jwt)
         }
 

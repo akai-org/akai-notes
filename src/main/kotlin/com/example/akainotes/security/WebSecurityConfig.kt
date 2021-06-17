@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.access.expression.WebExpressionVoter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -25,7 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class WebSecurityConfig(
     private val userDetailsService: NotesUserDetailsService,
     private val successHandler: WebSecurityAuthSuccessHandler,
-    private val jwtRequestFilter: JwtRequestFilter
+    private val jwtRequestFilter: JwtRequestFilter,
+    private val unauthorizedHandler: AuthenticationEntryPoint
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {
@@ -34,7 +36,11 @@ class WebSecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http.csrf()
-            .disable().authorizeRequests().antMatchers(HttpMethod.POST, "/login","/register").permitAll()
+            .disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            .authorizeRequests().antMatchers(HttpMethod.POST,"/register").permitAll()
             .anyRequest()
             .authenticated()
             .and().formLogin().loginProcessingUrl("/login")
