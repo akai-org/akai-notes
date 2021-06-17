@@ -12,32 +12,34 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UsersRestController(
-    private val authenticationManager: AuthenticationManager,
+//    private val authenticationManager: AuthenticationManager,
     private val userDetailsService: NotesUserDetailsService,
     private val jwtUtil: JwtUtil,
+    private val passwordEncoder: PasswordEncoder,
     private val usersRepository: UsersRepository
 ) {
 
-    @PostMapping("/login")
-    suspend fun logIn(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<AuthenticationResponse> {
-        try {
-            authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
-            )
-        } catch (e: BadCredentialsException) {
-            throw WrongCredentialsException("Incorrect username or password")
-        }
-
-        val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
-        val jwt = jwtUtil.generateToken(userDetails)
-        return ResponseEntity.ok(AuthenticationResponse(jwt))
-    }
+//    @PostMapping("/login")
+//    suspend fun logIn(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<AuthenticationResponse> {
+//        try {
+//            authenticationManager.authenticate(
+//                UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
+//            )
+//        } catch (e: BadCredentialsException) {
+//            throw WrongCredentialsException("Incorrect username or password")
+//        }
+//
+//        val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
+//        val jwt = jwtUtil.generateToken(userDetails)
+//        return ResponseEntity.ok(AuthenticationResponse(jwt))
+//    }
 
     @Throws(UserExistsException::class)
     @PostMapping("/register")
@@ -46,7 +48,7 @@ class UsersRestController(
             throw UserExistsException()
         }
         checkCredentials(authenticationRequest.username, authenticationRequest.password)
-        val newUser = authenticationRequest.toUser()
+        val newUser = authenticationRequest.toUser(passwordEncoder)
         usersRepository.save(newUser)
         return ResponseEntity.ok(newUser)
     }

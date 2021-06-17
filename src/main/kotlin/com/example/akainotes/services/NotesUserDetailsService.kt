@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class NotesUserDetailsService(private val usersRepository: UsersRepository) : UserDetailsService {
+
     override fun loadUserByUsername(username: String?): UserDetails = runBlocking {
         if (username == null) throw UsernameNotFoundException("Empty email")
 
